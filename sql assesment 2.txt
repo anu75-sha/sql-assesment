@@ -1,0 +1,266 @@
+MySQL  SQL > \c root@localhost
+Creating a session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 22 (X protocol)
+Server version: 8.0.45 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:33060+ ssl  SQL > show database
+                                 -> show databases;
+ERROR: 1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'database
+show databases' at line 1
+ MySQL  localhost:33060+ ssl  SQL > show database
+                                 -> show database;
+ERROR: 1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'database
+show database' at line 1
+ MySQL  localhost:33060+ ssl  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| amitdb             |
+| college            |
+| da                 |
+| information_schema |
+| jdbcproject        |
+| mydatabase         |
+| mysql              |
+| owner_db           |
+| performance_schema |
+| pet_db             |
+| salesdb            |
+| sys                |
++--------------------+
+12 rows in set (0.0023 sec)
+ MySQL  localhost:33060+ ssl  SQL > create table employees( empid int primary key, empname varchar(20), deptid varchar(20), salary int);
+ERROR: 1046: No database selected
+ MySQL  localhost:33060+ ssl  SQL > create table employees( empid int primary key, empname varchar(20), deptid varchar(20), salary int);
+ERROR: 1046: No database selected
+ MySQL  localhost:33060+ ssl  SQL > use mydatabase;
+Default schema set to `mydatabase`.
+Fetching global names, object names from `mydatabase` for auto-completion... Press ^C to stop.
+ MySQL  localhost:33060+ ssl  mydatabase  SQL > create table employees( empid int primary key, empname varchar(20), deptid varchar(20), salary int);
+Query OK, 0 rows affected (0.0868 sec)
+ MySQL  localhost:33060+ ssl  mydatabase  SQL >  insert into employees(empid,empname,deptid,salary) values (1,'arun','102',45000),(2,'bhavya','102',52000),(3,'chitra','101',47000),(4,'dinesh','103',39000),(5,'esha','null',41000),(6,'farhan','104',55000);
+Query OK, 6 rows affected (0.0517 sec)
+
+Records: 6  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  mydatabase  SQL >  desc employees;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| empid   | int         | NO   | PRI | NULL    |       |
+| empname | varchar(20) | YES  |     | NULL    |       |
+| deptid  | varchar(20) | YES  |     | NULL    |       |
+| salary  | int         | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+4 rows in set (0.0036 sec)
+ MySQL  localhost:33060+ ssl  mydatabase  SQL > select * from employees;
++-------+---------+--------+--------+
+| empid | empname | deptid | salary |
++-------+---------+--------+--------+
+|     1 | arun    | 102    |  45000 |
+|     2 | bhavya  | 102    |  52000 |
+|     3 | chitra  | 101    |  47000 |
+|     4 | dinesh  | 103    |  39000 |
+|     5 | esha    | null   |  41000 |
+|     6 | farhan  | 104    |  55000 |
++-------+---------+--------+--------+
+6 rows in set (0.0018 sec)
+ MySQL  localhost:33060+ ssl  mydatabase  SQL > create table departments(deptid varchar(10),deptname varchar(10));
+Query OK, 0 rows affected (0.0290 sec)
+ MySQL  localhost:33060+ ssl  mydatabase  SQL > desc departments;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| deptid   | varchar(10) | YES  |     | NULL    |       |
+| deptname | varchar(10) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+2 rows in set (0.0040 sec)
+ MySQL  localhost:33060+ ssl  mydatabase  SQL > insert into departments values(101,'sales'),(102,'HR'),(103,'IT'),(105,'Marketing');
+Query OK, 4 rows affected (0.0104 sec)
+
+Records: 4  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  mydatabase  SQL > select * from departments;
++--------+-----------+
+| deptid | deptname  |
++--------+-----------+
+| 101    | sales     |
+| 102    | HR        |
+| 103    | IT        |
+| 105    | Marketing |
++--------+-----------+
+4 rows in set (0.0011 sec)
+ MySQL  localhost:33060+ ssl  mydatabase  SQL > select e.empname,d.deptname,e.salary from employees as e inner join department as d on e.deptid=d.deptid;
+ERROR: 1146: Table 'mydatabase.department' doesn't exist
+ MySQL  localhost:33060+ ssl  mydatabase  SQL > select e.empname,d.deptname,e.salary from employees as e inner join departments as d on e.deptid=d.deptid;
++---------+----------+--------+
+| empname | deptname | salary |
++---------+----------+--------+
+| arun    | HR       |  45000 |
+| bhavya  | HR       |  52000 |
+| chitra  | sales    |  47000 |
+| dinesh  | IT       |  39000 |
++---------+----------+--------+
+4 rows in set (0.0016 sec)
+ MySQL  localhost:33060+ ssl  mydatabase  SQL > elect e.empname,d.deptname from employees as e left join departments as d on e.deptid=d.deptid;
+ERROR: 1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'elect e.empname,d.deptname from employees as e left join departments as d on e.d' at line 1
+ MySQL  localhost:33060+ ssl  mydatabase  SQL > select e.empname,d.deptname from employees as e left join departments as d on e.deptid=d.deptid;
++---------+----------+
+| empname | deptname |
++---------+----------+
+| arun    | HR       |
+| bhavya  | HR       |
+| chitra  | sales    |
+| dinesh  | IT       |
+| esha    | NULL     |
+| farhan  | NULL     |
++---------+----------+
+6 rows in set (0.0015 sec)
+ MySQL  localhost:33060+ ssl  mydatabase  SQL >  select e.empname,d.deptname from employees as e right join departments as d on e.deptid=d.deptid;
++---------+-----------+
+| empname | deptname  |
++---------+-----------+
+| chitra  | sales     |
+| bhavya  | HR        |
+| arun    | HR        |
+| dinesh  | IT        |
+| NULL    | Marketing |
++---------+-----------+
+5 rows in set (0.0017 sec)
+ MySQL  localhost:33060+ ssl  mydatabase  SQL >   select e.empname,d.deptname from employees as e left join departments as d on e.deptid=d.deptid union select e.empname,d.deptname from employees as e right join departments as d on e.deptid=d.deptid;
++---------+-----------+
+| empname | deptname  |
++---------+-----------+
+| arun    | HR        |
+| bhavya  | HR        |
+| chitra  | sales     |
+| dinesh  | IT        |
+| esha    | NULL      |
+| farhan  | NULL      |
+| NULL    | Marketing |
++---------+-----------+
+7 rows in set (0.0057 sec)
+ MySQL  localhost:33060+ ssl  mydatabase  SQL > select e.* from employees as e left join departments as d on e.deptid=d.deptid where d.deptid is null;
++-------+---------+--------+--------+
+| empid | empname | deptid | salary |
++-------+---------+--------+--------+
+|     5 | esha    | null   |  41000 |
+|     6 | farhan  | 104    |  55000 |
++-------+---------+--------+--------+
+2 rows in set (0.0013 sec)
+ MySQL  localhost:33060+ ssl  mydatabase  SQL > select e.empname,d.deptname,e.salary from employees as e, departments as d where e.deptid=d.deptid;
++---------+----------+--------+
+| empname | deptname | salary |
++---------+----------+--------+
+| arun    | HR       |  45000 |
+| bhavya  | HR       |  52000 |
+| chitra  | sales    |  47000 |
+| dinesh  | IT       |  39000 |
++---------+----------+--------+
+4 rows in set (0.0013 sec)
+ MySQL  localhost:33060+ ssl  mydatabase  SQL >  select e.empname,d.deptname from departments as d right join employees as e on e.deptid=d.deptid;
++---------+----------+
+| empname | deptname |
++---------+----------+
+| arun    | HR       |
+| bhavya  | HR       |
+| chitra  | sales    |
+| dinesh  | IT       |
+| esha    | NULL     |
+| farhan  | NULL     |
++---------+----------+
+6 rows in set (0.0015 sec)
+ MySQL  localhost:33060+ ssl  mydatabase  SQL > select e.empname,d.deptname from employees as e cross join departments as d;
++---------+-----------+
+| empname | deptname  |
++---------+-----------+
+| arun    | Marketing |
+| arun    | IT        |
+| arun    | HR        |
+| arun    | sales     |
+| bhavya  | Marketing |
+| bhavya  | IT        |
+| bhavya  | HR        |
+| bhavya  | sales     |
+| chitra  | Marketing |
+| chitra  | IT        |
+| chitra  | HR        |
+| chitra  | sales     |
+| dinesh  | Marketing |
+| dinesh  | IT        |
+| dinesh  | HR        |
+| dinesh  | sales     |
+| esha    | Marketing |
+| esha    | IT        |
+| esha    | HR        |
+| esha    | sales     |
+| farhan  | Marketing |
+| farhan  | IT        |
+| farhan  | HR        |
+| farhan  | sales     |
++---------+-----------+
+24 rows in set (0.0013 sec)
+ MySQL  localhost:33060+ ssl  mydatabase  SQL > alter table employees add m_id int;
+Query OK, 0 rows affected (0.0341 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  mydatabase  SQL > update employees set m_id=1 where empid=1;
+Query OK, 1 row affected (0.0091 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+ MySQL  localhost:33060+ ssl  mydatabase  SQL > update employees set m_id=1 where empid=2;
+Query OK, 1 row affected (0.0095 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+ MySQL  localhost:33060+ ssl  mydatabase  SQL > update employees set m_id=2 where empid=3;
+Query OK, 1 row affected (0.0509 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+ MySQL  localhost:33060+ ssl  mydatabase  SQL > update employees set m_id=2 where empid=4;
+Query OK, 1 row affected (0.0095 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+ MySQL  localhost:33060+ ssl  mydatabase  SQL >  update employees set m_id=3 where empid=5;
+Query OK, 1 row affected (0.0504 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+ MySQL  localhost:33060+ ssl  mydatabase  SQL > update employees set m_id=3 where empid=6;
+Query OK, 1 row affected (0.0461 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+ MySQL  localhost:33060+ ssl  mydatabase  SQL > select * from employees;
++-------+---------+--------+--------+------+
+| empid | empname | deptid | salary | m_id |
++-------+---------+--------+--------+------+
+|     1 | arun    | 102    |  45000 |    1 |
+|     2 | bhavya  | 102    |  52000 |    1 |
+|     3 | chitra  | 101    |  47000 |    2 |
+|     4 | dinesh  | 103    |  39000 |    2 |
+|     5 | esha    | null   |  41000 |    3 |
+|     6 | farhan  | 104    |  55000 |    3 |
++-------+---------+--------+--------+------+
+6 rows in set (0.0013 sec)
+ MySQL  localhost:33060+ ssl  mydatabase  SQL > select e.empname, m.empname from employees as e left join employees as m on e.m_id=m.empid;
++---------+---------+
+| empname | empname |
++---------+---------+
+| arun    | arun    |
+| bhavya  | arun    |
+| chitra  | bhavya  |
+| dinesh  | bhavya  |
+| esha    | chitra  |
+| farhan  | chitra  |
++---------+---------+
+6 rows in set (0.0016 sec)
+ MySQL  localhost:33060+ ssl  mydatabase  SQL > select e.empname as employees, m.empname as manager from employees as e left join employees as m on e.m_id=m.empid;
++-----------+---------+
+| employees | manager |
++-----------+---------+
+| arun      | arun    |
+| bhavya    | arun    |
+| chitra    | bhavya  |
+| dinesh    | bhavya  |
+| esha      | chitra  |
+| farhan    | chitra  |
++-----------+---------+
+6 rows in set (0.0013 sec)
+ MySQL  localhost:33060+ ssl  m
